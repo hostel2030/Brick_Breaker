@@ -3,7 +3,6 @@ package com.finalproject.brickbreaker.activities;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -13,8 +12,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.MotionEvent;
 
-import com.finalproject.brickbreaker.interfaces.ICurrentLevelChangedListener;
+import com.finalproject.brickbreaker.interfaces.IInitiateGameListener;
 import com.finalproject.brickbreaker.interfaces.IOnLevelAddedListener;
+import com.finalproject.brickbreaker.managers.GameOverManager;
 import com.finalproject.brickbreaker.managers.GameStateManager;
 import com.finalproject.brickbreaker.managers.GameplayManager;
 import com.finalproject.brickbreaker.managers.LevelsManager;
@@ -25,32 +25,22 @@ import com.finalproject.brickbreaker.models.Button;
 import com.finalproject.brickbreaker.models.Screen;
 import com.finalproject.brickbreaker.models.Sprite;
 
-public class GameActivity extends Screen  implements IOnLevelAddedListener {
+public class GameActivity extends Screen  implements IOnLevelAddedListener, IInitiateGameListener {
 
 	//paints
 	Paint Title_Paint = new Paint();
 
-	Paint Gameover_Score_Paint = new Paint();
+
 	Paint Instruction_Paint = new Paint();
 	Paint Black_shader = new Paint();
 	Paint Black_dark_shader = new Paint();
 
-	//background
-	Bitmap background;
-
 	Sprite wall_sprite;
 
-
 	//menu buttons
-	Button btn_Play, btn_Replay, btn_Next;
+	Button btn_Play;
 
 	int top_border, side_borders;
-
-	//TODO: Speed and score Controls.
-
-	//int[] Top_scores;
-
-	Sprite gamewon, gameover;
 
 	Typeface specialFont;
 
@@ -59,8 +49,7 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener {
 	com.finalproject.brickbreaker.managers.AudioManager audioManager;
 	GameplayManager gameplayManager;
 	GameStateManager gameStateManager;
-
-
+	GameOverManager gameOverManager;
 
 	public void OnLevelAdded(){
 		levelsManager.LoadPatterns();
@@ -78,14 +67,10 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener {
 
 		gameStateManager = new GameStateManager();
 		audioManager = new com.finalproject.brickbreaker.managers.AudioManager(this,gameStateManager);
-		levelsManager = new LevelsManager(this, audioManager, new ICurrentLevelChangedListener() {
-			@Override
-			public void OnCurrentLevelChanged() {
-				StartGame();
-			}
-		});
+		levelsManager = new LevelsManager(this, audioManager, this);
 		levelsManager.LoadPatterns();
 		gameplayManager = new GameplayManager(this,levelsManager,audioManager,gameStateManager);
+		gameOverManager = new GameOverManager(this,audioManager,levelsManager,gameplayManager,this);
 
 
 		LevelsPatternsManager.GetInstance(getBaseContext()).RegisterLevelAdded(this);
@@ -112,11 +97,7 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener {
 
 
 
-		//gameover score Paint
-		Gameover_Score_Paint.setTextSize(dpToPx(50));
-		Gameover_Score_Paint.setAntiAlias(true);
-		Gameover_Score_Paint.setColor(getResources().getColor(R.color.black));
-		Gameover_Score_Paint.setTypeface(specialFont);
+
 
 		//Wall Instruction Paint
 		Instruction_Paint.setTextSize(dpToPx(38));
@@ -157,15 +138,7 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener {
 
 
 
-		//replay button
-		btn_Replay = new Button(new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.replay), ScreenWidth() * 0.13f), 0, 0, this, false);
-		btn_Replay.x = ScreenWidth() / 2 - btn_Replay.getWidth() * 2f;
-		btn_Replay.y = ScreenHeight() - (wall_sprite.getHeight() / 2) - (btn_Replay.getHeight() / 2);
-
-		//next button
-		btn_Next = new Button(new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.next), ScreenWidth() * 0.12f), 0, 0, this, false);
-		btn_Next.x = ScreenWidth() / 2 + btn_Next.getWidth();
-		btn_Next.y = ScreenHeight() - (wall_sprite.getHeight() / 2) - (btn_Next.getHeight() / 2);
+		gameOverManager.initialize(wall_sprite,specialFont);
 
 		//gameplay stuff________________________________________________________________________________
 
@@ -174,9 +147,7 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener {
 		//set world origin
 		setOrigin(BOTTOM_LEFT);
 
-		//initialise score image
-		gamewon = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.score), ScreenWidth() * 0.3f);
-		gameover = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.gameover), ScreenWidth() * 0.3f);
+
 
 		//state = MENU;
 
@@ -255,18 +226,7 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener {
 		} else if (gameStateManager.state == GameStateManager.GameState.levelMenu) {
 			levelsManager.onTouch(event);
 		} else if (gameStateManager.state == GameStateManager.GameState.gameOver) {
-			if (event.getAction() == MotionEvent.ACTION_UP) {
-				//refresh all
-
-				if (btn_Replay.isTouched(event)) {
-					StartGame();
-					audioManager.playBounce();
-				}
-
-				if (btn_Next.isTouched(event)) {
-					levelsManager.advanceToNextLevel();
-				}
-			}
+			gameOverManager.onTouch(event);
 		} else if (gameStateManager.state == GameStateManager.GameState.gameplay) {
 			gameplayManager.onTouch(event);
 		}
@@ -274,7 +234,7 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener {
 
 	//..................................................Game Functions..................................................................................................................................
 
-	private void StartGame(){
+	public void startGame(){
 		gameplayManager.StartGame(wall_sprite);
 	}
 
@@ -314,25 +274,7 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener {
 		} else if (gameStateManager.state == GameStateManager.GameState.gameplay) {
 			gameplayManager.draw(canvas,Title_Paint);
 		} else if (gameStateManager.state == GameStateManager.GameState.gameOver) {
-			if (gameplayManager.getLivesLeft() > 0) {
-				//level passed
-				Rect Title_Paint_bounds = new Rect();
-				Title_Paint.getTextBounds(getResources().getString(R.string.Level_passed), 0, getResources().getString(R.string.Level_passed).length(), Title_Paint_bounds);
-				canvas.drawText(getResources().getString(R.string.Level_passed), (ScreenWidth() / 2) - (Title_Paint_bounds.width() / 2), (top_border * 0.75f) + (Title_Paint_bounds.height() / 2), Title_Paint);
-				gamewon.draw(canvas, (ScreenWidth() / 2) - (gamewon.getWidth() / 2), (float) (ScreenHeight() * 0.30));
-			} else {
-				//game over 
-				Rect Title_Paint_bounds = new Rect();
-				Title_Paint.getTextBounds(getResources().getString(R.string.game_over), 0, getResources().getString(R.string.game_over).length(), Title_Paint_bounds);
-				canvas.drawText(getResources().getString(R.string.game_over), (ScreenWidth() / 2) - (Title_Paint_bounds.width() / 2), (top_border * 0.75f) + (Title_Paint_bounds.height() / 2), Title_Paint);
-				gameover.draw(canvas, (ScreenWidth() / 2) - (gameover.getWidth() / 2), (float) (ScreenHeight() * 0.25));
-			}
-			String scoreDisplay = levelsManager.getCurrentScoreDisplay();
-			canvas.drawText(scoreDisplay, (ScreenWidth() / 2) - (Gameover_Score_Paint.measureText(scoreDisplay) / 2), (float) (ScreenHeight() * 0.55), Gameover_Score_Paint);
-
-			btn_Replay.draw(canvas);
-			btn_Next.draw(canvas);
-
+			gameOverManager.draw(canvas, Title_Paint);
 		}
 		//draw sound buttons
 		audioManager.draw(canvas);

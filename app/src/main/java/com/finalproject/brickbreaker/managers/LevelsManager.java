@@ -8,7 +8,7 @@ import android.graphics.Typeface;
 import android.view.MotionEvent;
 
 import com.finalproject.brickbreaker.services.BrickTypes;
-import com.finalproject.brickbreaker.interfaces.ICurrentLevelChangedListener;
+import com.finalproject.brickbreaker.interfaces.IInitiateGameListener;
 import com.finalproject.brickbreaker.activities.LevelBuilderActivity;
 import com.finalproject.brickbreaker.R;
 import com.finalproject.brickbreaker.services.Settings;
@@ -27,17 +27,17 @@ public class LevelsManager {
     int level_circles_border_dp;
     private Screen screen;
     private AudioManager audioManager;
-    private ICurrentLevelChangedListener currentLevelChangedListener;
+    private IInitiateGameListener initiateGameListener;
     Paint SubTitle_Paint = new Paint();
     int level_circles_border = 30;//level menu circles border
     int currentLevel = 0;
     SingleScore scoreManager;
     int unlocked = 12145;//just an unlock code to store in preferences
 
-    public LevelsManager(Screen screen, AudioManager audioManager, ICurrentLevelChangedListener currentLevelChangedListener){
+    public LevelsManager(Screen screen, AudioManager audioManager, IInitiateGameListener initiateGameListener){
         this.screen = screen;
         this.audioManager = audioManager;
-        this.currentLevelChangedListener = currentLevelChangedListener;
+        this.initiateGameListener = initiateGameListener;
         this.levelsPatternsManager = LevelsPatternsManager.GetInstance(screen.getBaseContext());
     }
 
@@ -113,7 +113,7 @@ public class LevelsManager {
                     }
                     else if (!Level_Buttons[i].isLocked()) {
                         currentLevel = i;
-                        currentLevelChangedListener.OnCurrentLevelChanged();
+                        initiateGameListener.startGame();
                         audioManager.playBounce();
                     } else {
                         audioManager.playReject();
@@ -141,7 +141,7 @@ public class LevelsManager {
         if (Level_Buttons.length - 1 > currentLevel + 1) {
             if (!Level_Buttons[currentLevel + 1].isLocked()) {
                 currentLevel = currentLevel + 1;
-                currentLevelChangedListener.OnCurrentLevelChanged();
+                initiateGameListener.startGame();
                 audioManager.playBounce();
             } else {
                 audioManager.playReject();
