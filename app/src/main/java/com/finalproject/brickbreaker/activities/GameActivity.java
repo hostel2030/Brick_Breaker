@@ -674,7 +674,7 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener {
 			String scoreDisplay = levelsManager.getCurrentScoreDisplay();
 			Rect Title_Paint_bounds = new Rect();
 			Title_Paint.getTextBounds(scoreDisplay, 0, scoreDisplay.length(), Title_Paint_bounds);
-			canvas.drawText(scoreDisplay, (ScreenWidth() / 2) - (Title_Paint_bounds.width() / 2), (top_border * 0.75f) + (Title_Paint_bounds.height() / 2), Title_Paint);
+			canvas.drawText(scoreDisplay, 0, (top_border * 0.75f) + (Title_Paint_bounds.height() / 2), Title_Paint);
 
 			//pause button
 			btn_pause.draw(canvas);

@@ -5,6 +5,7 @@ import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
 
@@ -120,10 +121,6 @@ public class Button extends Instance {
 	 *            x-coordinate to draw button
 	 * @param y
 	 *            y-coordinate to draw button
-	 * @param height
-	 *            button width
-	 * @param width
-	 *            button height
 	 * @param screen
 	 *            A reference to the main nudge engine screen instance
 	 * @param world
@@ -203,7 +200,12 @@ public class Button extends Instance {
 			Rect bounds = new Rect();
 			textPaint.getTextBounds(text, 0, text.length(), bounds);
 
-			canvas.drawCircle(x + (width / 2), y + (height / 2), (width / 2), BackPaint);
+			//canvas.drawCircle(x + (width / 2), y + (height / 2), (width / 2), BackPaint);
+
+			final RectF rect = new RectF();
+			rect.set(x, y, x + width, y + height);
+			canvas.drawRoundRect(rect, 15, 15, BackPaint);
+
 			canvas.drawText(text, x + (getWidth() / 2) - (bounds.width() / 2), y + (getHeight() / 2) + (bounds.height() / 2), textPaint);
 
 		} else if (type == SPRITE_BTN) {
