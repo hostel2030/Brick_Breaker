@@ -25,9 +25,11 @@ public class AudioManager {
     //sound
     Sprite sound_on, sound_off, music_on, music_off;
     private Screen screen;
+    private GameStateManager gameStateManager;
 
-    public AudioManager(Screen screen){
+    public AudioManager(Screen screen, GameStateManager gameStateManager){
         this.screen = screen;
+        this.gameStateManager = gameStateManager;
 
         //initialise sound fx
         screen.setVolumeControlStream(android.media.AudioManager.STREAM_MUSIC);
@@ -88,8 +90,8 @@ public class AudioManager {
             sp.play(sound_gameover, 1, 1, 0, 0, 1);
     }
 
-    public void playMusic(boolean isGamePlayed) {
-        if (!music_muted && isGamePlayed) {
+    public void playMusic() {
+        if (!music_muted && gameStateManager.state == GameStateManager.GameState.gameplay) {
             music = MediaPlayer.create(screen, R.raw.music);
             music.start();
             music.setVolume(0.5f, 0.5f);
@@ -101,12 +103,12 @@ public class AudioManager {
         music.stop();
     }
 
-    public void toggleMusic(boolean pause, boolean isGamePlayed) {
+    public void toggleMusic(boolean pause) {
         if (music_muted) {
             music_muted = false;
             btn_music_mute.sprite = music_on;
             if (!pause) {
-                playMusic(isGamePlayed);
+                playMusic();
             }
         } else {
             music_muted = true;
@@ -125,7 +127,7 @@ public class AudioManager {
         }
     }
 
-    public void onTouch(MotionEvent event,boolean pause, boolean isGamePlayed){
+    public void onTouch(MotionEvent event,boolean pause){
         //handle constant events like sound buttons
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
@@ -145,7 +147,7 @@ public class AudioManager {
                 toggleSoundFx();
             }
             if (btn_music_mute.isTouched(event)) {
-                toggleMusic(pause,isGamePlayed);
+                toggleMusic(pause);
             }
         }
     }
