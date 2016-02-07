@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- App Name -->
+    <string name="app_name">Classic Brick Breaker</string>
+
+    <!-- Game Over -->
+    <string name="game_over">Game Over!</string>
+    <string name="Level_passed">Game Won!</string>
+
+    <!-- Level menu -->
+    <string name="SelectLevel">Choose a level</string>
+
+    <!-- Game Play -->
+    <string name="Paused">Paused - Tap Here</string>
+    <string name="time_suffix">!</string>
+
+    <!-- Main Menu -->
+    <string name="Play">Play Now!</string>
+
+    <!-- Primary Colors -->
+    <color name="black">#ff333333</color>
+    <color name="black_dark">#ff292929</color>
+    <color name="trans_black">#88333333</color>
+    <color name="red">#ffE85E4F</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="blue_darkest">#ff3198B0</color>
+    <color name="blue_dark">#FF38AEC9</color>
+    <color name="blue">#80ddff</color>
+    <color name="green">#ffA6FF94</color>
+    <color name="yellow">#ffFFD157</color>
+
+</resources>
