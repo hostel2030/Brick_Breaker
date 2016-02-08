@@ -9,6 +9,8 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.view.MotionEvent;
 
+import com.finalproject.brickbreaker.services.BrickTypes;
+
 public class Button extends Instance {
 	public final int TEXT_BTN = 0, SPRITE_BTN = 1, TEXT_BOX_BTN = 2, TEXT_CIRCLE_BTN = 3;
 	public int type;
@@ -32,7 +34,7 @@ public class Button extends Instance {
 	 *            true if you wish to draw the button relative to the camera or false if you wish to draw it relative to screen
 	 */
 	public Button(Sprite sprite, float x, float y, Screen screen, boolean world) {
-		super(sprite, x, y, screen, world);
+		super(sprite, x, y, screen, BrickTypes.Empty);
 		type = SPRITE_BTN;
 	}
 
@@ -57,7 +59,7 @@ public class Button extends Instance {
 	 *            true if you wish to draw the button relative to the camera or false if you wish to draw it relative to screen
 	 */
 	public Button(String text, int dpSize, Typeface font, int color, float x, float y, Screen screen, boolean world) {
-		super(null, x, y, screen, world);
+		super(null, x, y, screen, BrickTypes.Empty);
 		type = TEXT_BTN;
 		textPaint = new Paint();
 		textPaint.setTextSize(screen.dpToPx(dpSize));
@@ -92,7 +94,7 @@ public class Button extends Instance {
 	 *            true if you wish to draw the button relative to the camera or false if you wish to draw it relative to screen
 	 */
 	public Button(String text, int dpSize, Typeface font, int color, float x, float y, float height, float width, int BackColor, Screen screen, boolean world) {
-		super(null, x, y, screen, world);
+		super(null, x, y, screen, BrickTypes.Empty);
 		type = TEXT_BOX_BTN;
 		textPaint = new Paint();
 		textPaint.setTextSize(screen.dpToPx(dpSize));
@@ -123,11 +125,10 @@ public class Button extends Instance {
 	 *            y-coordinate to draw button
 	 * @param screen
 	 *            A reference to the main nudge engine screen instance
-	 * @param world
-	 *            true if you wish to draw the button relative to the camera or false if you wish to draw it relative to screen
+
 	 */
-	public Button(String text, int dpSize, Typeface font, int color, float x, float y, float radius, int BackColor, Screen screen, boolean world) {
-		super(null, x, y, screen, world);
+	public Button(String text, int dpSize, Typeface font, int color, float x, float y, float radius, int BackColor, Screen screen) {
+		super(null, x, y, screen, BrickTypes.Empty);
 		type = TEXT_CIRCLE_BTN;
 		textPaint = new Paint();
 		textPaint.setTextSize(screen.dpToPx(dpSize));
@@ -213,18 +214,13 @@ public class Button extends Instance {
 		} else {
 			canvas.drawText(text, x, y + getHeight(), textPaint);
 		}
-		if (screen.debug_mode)
-			physics.drawDebug(canvas);
+
 
 	}
 
 	@Override
 	public boolean isTouched(MotionEvent event) {
-		if (world)
-			return physics.intersect(screen.ScreenX((int) x), screen.ScreenY((int) y), getWidth(), (int) getHeight(), (int) event.getX(), (int) event.getY());
-		else
-			return physics.intersect((int) x, (int) y, getWidth(), (int) getHeight(), (int) event.getX(), (int) event.getY());
-
+		return physics.intersect((int) x, (int) y, getWidth(), (int) getHeight(), (int) event.getX(), (int) event.getY());
 	}
 
 }

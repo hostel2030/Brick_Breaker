@@ -1,10 +1,6 @@
 package com.finalproject.brickbreaker.models;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.Paint.Style;
 
 public class Physics {
 	RectF a = null, b = null;
@@ -24,17 +20,4 @@ public class Physics {
 		return false;
 	}
 
-	public void drawDebug(Canvas canvas) {
-		//draw collisions
-
-		Paint paint = new Paint();
-		paint.setColor(Color.RED);
-		paint.setStyle(Style.STROKE);
-		paint.setStrokeWidth(5);
-		if (a != null)
-			canvas.drawRect(a, paint);
-		if (b != null)
-			canvas.drawRect(b, paint);
-
-	}
 }

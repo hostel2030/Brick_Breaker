@@ -17,8 +17,8 @@ public class level_button extends Button {
 	Screen screen;
 	Sprite lock, unlock;
 
-	public level_button(String text, int dpSize, Typeface font, int color, float x, float y, float radius, int BackColor, Screen screen, boolean world, Paint level_paint) {
-		super(text, dpSize, font, color, x, y, radius, BackColor, screen, world);
+	public level_button(String text, int dpSize, Typeface font, int color, float x, float y, float radius, int BackColor, Screen screen, Paint level_paint) {
+		super(text, dpSize, font, color, x, y, radius, BackColor, screen);
 		this.level_paint = level_paint;
 		this.screen = screen;
 		lock = new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.lock), radius / 2);

@@ -62,7 +62,7 @@ public class GameplayManager {
         top_border = Settings.getTopBorder(screen.ScreenHeight());
 
         //bat
-        bat = new Instance(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.bat), screen.ScreenWidth() * 0.2f), 0, 0, screen, false);
+        bat = new Instance(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.bat), screen.ScreenWidth() * 0.2f), 0, 0, screen, BrickTypes.Empty);
         bat.x = screen.ScreenWidth() / 2 - bat.getWidth() / 2;
         bat.y = screen.ScreenHeight() - (relativeSprite.getHeight()) - (bat.getHeight() * 1.2f);
 
@@ -300,7 +300,7 @@ public class GameplayManager {
     }
 
     private void add_ball() {
-        balls.add(new Instance(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.ball), screen.ScreenWidth() * 0.04f), 0, 0, screen, false));
+        balls.add(new Instance(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.ball), screen.ScreenWidth() * 0.04f), 0, 0, screen, BrickTypes.Empty));
         balls.get(balls.size() - 1).x = screen.ScreenWidth() / 2 - balls.get(0).getWidth() / 2;
         balls.get(balls.size() - 1).y = screen.ScreenHeight() * 0.7f;
         balls.get(balls.size() - 1).speedy = -screen.dpToPx(10);
@@ -350,7 +350,7 @@ public class GameplayManager {
                     bricks_current_level[x][y] = null;
                 else {
                     Sprite brick = new Sprite(BitmapFactory.decodeResource(screen.getResources(),  BrickTypesHelper.GetImageId(currentBrickPattern[y][x])), (screen.ScreenWidth() * 0.1f) - ((float) Settings.getSideBorders(screen) / 5));
-                    bricks_current_level[x][y] = new Instance(brick, x * brick.getWidth() + Settings.getSideBorders(screen), (y * brick.getHeight()) + top_border, screen, false, currentBrickPattern[y][x]);
+                    bricks_current_level[x][y] = new Instance(brick, x * brick.getWidth() + Settings.getSideBorders(screen), (y * brick.getHeight()) + top_border, screen, currentBrickPattern[y][x]);
                 }
             }
         }

@@ -1,27 +1,14 @@
 package com.finalproject.brickbreaker.models;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PointF;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.view.Display;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.View.OnTouchListener;
@@ -29,38 +16,20 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
-public class Screen extends Activity implements Runnable, OnTouchListener, SensorEventListener {
+public class Screen extends Activity implements Runnable, OnTouchListener {
 	private SurfaceHolder holder;
 	private boolean locker = true, initialised = false;
 	private Thread thread;
 	//public WakeLock WL;
 	private int width = 0, height = 0;
-	public float cameraX = 0, cameraY = 0;
 
 	public Activity activity = this;
-	public boolean debug_mode = false;
 	private long now = SystemClock.elapsedRealtime(), lastRefresh, lastfps;
 	public SurfaceView surface;
-	private int fps = 0, frames = 0, runtime = 0, drawtime = 0;
-
-	//sensor
-	SensorManager sm;
-	Sensor s;
-	float sensorx, calibratex = 0;
-	float sensory, calibratey = 0;
-	private boolean default_lanscape = false;
-	private int default_lanscape_rotation = 0;
-
-	//world origin
-	public final int TOP_LEFT = 0, BOTTOM_LEFT = 1;
-	public int origin = TOP_LEFT;
 
 	//layout
 	public RelativeLayout layout;
 	public LinearLayout linear_layout;
-
-	//gesture
-	private GestureDetector gestureDetector;
 
 	//canvas
 	Canvas canvas;
@@ -97,14 +66,10 @@ public class Screen extends Activity implements Runnable, OnTouchListener, Senso
 
 		//listeners
 		surface.setOnTouchListener(this);
-		gestureDetector = new GestureDetector(this, new GestureListener());
 
 		// start game loop
 		thread = new Thread(this);
 		thread.start();
-
-		onCreate();
-
 	}
 
 	/* Main game loop.......................................................... */
@@ -125,18 +90,12 @@ public class Screen extends Activity implements Runnable, OnTouchListener, Senso
 
 					//fps
 					if (now - lastfps > 1000) {
-						fps = frames;
-						frames = 0;
 						lastfps = SystemClock.elapsedRealtime();
-					} else {
-						frames++;
 					}
 
 					//step
 					if (initialised)
 						Step();
-					//take run time
-					runtime = (int) (SystemClock.elapsedRealtime() - lastRefresh);
 
 					//draw screen
 					canvas = holder.lockCanvas();
@@ -150,15 +109,7 @@ public class Screen extends Activity implements Runnable, OnTouchListener, Senso
 						initialised = true;
 					}
 					holder.unlockCanvasAndPost(canvas);
-					//take render time
-					drawtime = (int) (SystemClock.elapsedRealtime() - lastRefresh) - runtime;
 				}
-				//System.out.println("finish-----");
-				//try {
-				//	Thread.sleep(10);
-				//} catch (InterruptedException e) {
-				//	e.printStackTrace();
-				//}
 			}
 		}
 	}
@@ -171,15 +122,10 @@ public class Screen extends Activity implements Runnable, OnTouchListener, Senso
 			BackPressed();
 			return false;
 		}
-
 		return false;
 	}
 
 	/* Events.................................................................. */
-	public void onCreate() {
-
-	}
-
 	public void Start() {
 
 	}
@@ -203,18 +149,6 @@ public class Screen extends Activity implements Runnable, OnTouchListener, Senso
 	}
 
 	public void Draw(Canvas canvas) {
-		if (debug_mode) {
-			Paint paint = new Paint();
-			paint.setColor(Color.BLACK);
-			paint.setTextSize(dpToPx(20));
-			canvas.drawText("Width: " + width + ", Height: " + height, 5, dpToPx(20), paint);
-			canvas.drawText("default landscape: " + default_lanscape + " Rotation: " + default_lanscape_rotation, 5, 5 + dpToPx(20) * 2, paint);
-			canvas.drawText("FPS: " + fps + "run_time: " + runtime + "draw_time: " + drawtime, 5, 5 + dpToPx(20) * 3, paint);
-		}
-
-	}
-
-	public void Finish() {
 
 	}
 
@@ -245,21 +179,6 @@ public class Screen extends Activity implements Runnable, OnTouchListener, Senso
 	public synchronized void onTouch(float TouchX, float TouchY, MotionEvent event) {
 	}
 
-	public synchronized void onAccelerometer(PointF point) {
-	}
-
-	public void onSwipeLeft() {
-	}
-
-	public void onSwipeRight() {
-	}
-
-	public void onSwipeUp() {
-	}
-
-	public void onSwipeDown() {
-	}
-
 	/* Functions............................................................... */
 	public void Exit() {
 		locker = false;
@@ -278,13 +197,6 @@ public class Screen extends Activity implements Runnable, OnTouchListener, Senso
 		activity.finish();
 	}
 
-	public Activity getActivity() {
-		return activity;
-	}
-
-	public void setDebugMode(boolean debugModeOn) {
-		debug_mode = debugModeOn;
-	}
 
 	//screen related
 	public int ScreenWidth() {
@@ -295,91 +207,6 @@ public class Screen extends Activity implements Runnable, OnTouchListener, Senso
 		return height;
 	}
 
-	/**
-	 * World X to Screen X
-	 * 
-	 * @param worldX
-	 *            The x-coordinate relative to the world
-	 */
-	public int ScreenX(float worldX) {
-		return (int) (worldX - cameraX);
-	}
-
-	/**
-	 * World Y to Screen Y
-	 * 
-	 * @param worldY
-	 *            The Y-coordinate relative to the world
-	 */
-	public int ScreenY(float worldY) {
-		if (origin == TOP_LEFT)
-			return (int) (worldY - cameraY);
-		else
-			return ScreenHeight() - (int) (worldY - cameraY);
-	}
-
-	/**
-	 * World origin (0,0)
-	 * 
-	 * @param origin
-	 *            TOP_LEFT or BOTTOM_LEFT
-	 */
-	public void setOrigin(int origin) {
-		this.origin = origin;
-	}
-
-	public boolean inScreen(float x, float y) {
-		return ((ScreenY(y) > 0 && ScreenY(y) < ScreenHeight()) && (ScreenX(x) > 0 && ScreenX(x) < ScreenWidth()));
-	}
-
-	public void recalculateScreen() {
-		recalculateScreenCounter = 10;
-	}
-
-	//sensor related
-	public void initialiseAccelerometer() {
-		//device has its default landscape or portrait
-		Display display = ((WindowManager) activity.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-		int rotation = display.getRotation();
-		if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-			//portrait
-			if (rotation == Surface.ROTATION_0)
-				default_lanscape = false;
-			if (rotation == Surface.ROTATION_180)
-				default_lanscape = false;
-			if (rotation == Surface.ROTATION_90)
-				default_lanscape = true;
-			if (rotation == Surface.ROTATION_270)
-				default_lanscape = true;
-		} else {
-			//landscape
-			if (rotation == Surface.ROTATION_0)
-				default_lanscape = true;
-			if (rotation == Surface.ROTATION_180)
-				default_lanscape = true;
-			if (rotation == Surface.ROTATION_90)
-				default_lanscape = false;
-			if (rotation == Surface.ROTATION_270)
-				default_lanscape = false;
-		}
-		default_lanscape_rotation = rotation;
-
-		sm = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
-		if (sm.getSensorList(Sensor.TYPE_ACCELEROMETER).size() != 0) {
-			s = sm.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
-			sm.registerListener(this, s, SensorManager.SENSOR_DELAY_NORMAL);
-		}
-
-	}
-
-	public void CalibrateAccelerometer() {
-		calibratex = sensorx * Math.abs(sensorx);
-		calibratey = sensory * Math.abs(sensory);
-	}
-
-	public PointF getAccelerometer() {
-		return new PointF((sensorx * Math.abs(sensorx) - calibratex), (sensory * Math.abs(sensory) - calibratey));
-	}
 
 	/* Touch events.......................................................... */
 	@Override
@@ -387,85 +214,7 @@ public class Screen extends Activity implements Runnable, OnTouchListener, Senso
 		if (initialised) {
 			onTouch(event.getX(), event.getY(), event);
 		}
-		return gestureDetector.onTouchEvent(event);
-	}
-
-	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-	}
-
-	@Override
-	public void onSensorChanged(SensorEvent event) {
-		if (initialised) {
-			//read values
-			if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-				if (default_lanscape) {
-					sensorx = -event.values[1];
-					sensory = -event.values[0];
-				} else {
-					sensory = event.values[1];
-					sensorx = -event.values[0];
-				}
-			} else {
-				if (default_lanscape) {
-					sensory = event.values[1];
-					sensorx = -event.values[0];
-				} else {
-					sensorx = event.values[1];
-					sensory = event.values[0];
-				}
-			}
-
-			//call accelerometer event
-			onAccelerometer(new PointF((sensorx - calibratex), (sensory - calibratey)));
-
-		}
-		//sleep for a while
-		try {
-			Thread.sleep(16);
-		} catch (InterruptedException ex) {
-			ex.printStackTrace();
-		}
-	}
-
-	/* Gesture detection....................................................... */
-
-	private final class GestureListener extends SimpleOnGestureListener {
-
-		private final int SWIPE_DISTANCE_THRESHOLD = dpToPx(50);
-		private final int SWIPE_VELOCITY_THRESHOLD = dpToPx(50);
-
-		int dpToPx(int dp) {
-			float density = getApplicationContext().getResources().getDisplayMetrics().density;
-			return Math.round((float) dp * density);
-		}
-
-		@Override
-		public boolean onDown(MotionEvent e) {
-			return true;
-		}
-
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-			float distanceX = e2.getX() - e1.getX();
-			float distanceY = e2.getY() - e1.getY();
-			if (Math.abs(distanceX) > Math.abs(distanceY) && Math.abs(distanceX) > SWIPE_DISTANCE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-				if (distanceX > 0)
-					onSwipeRight();
-				else
-					onSwipeLeft();
-				return true;
-			}
-			if (Math.abs(distanceY) > Math.abs(distanceX) && Math.abs(distanceY) > SWIPE_DISTANCE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-				if (distanceY > 0)
-					onSwipeDown();
-				else
-					onSwipeUp();
-				return true;
-			}
-			return false;
-		}
-
+		return true;
 	}
 
 	/* pause, destroy, resume................................................ */
@@ -480,11 +229,4 @@ public class Screen extends Activity implements Runnable, OnTouchListener, Senso
 		Pause();
 		super.onPause();
 	}
-
-	@Override
-	protected void onDestroy() {
-		Finish();
-		super.onDestroy();
-	}
-
 }

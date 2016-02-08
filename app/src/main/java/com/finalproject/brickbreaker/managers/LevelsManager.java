@@ -77,7 +77,7 @@ public class LevelsManager {
                 if (current_lvl <=levelsNum){
                     String text = current_lvl ==  levelsNum ? "+" : String.valueOf(current_lvl);
 
-                    Level_Buttons[current_lvl - 1] = new level_button(text, (int) (radius / 1.5f), font,screen.getResources().getColor(R.color.black), level_circles_border_dp + (x * ((radius * 2) + level_circles_border_dp)), (screen.ScreenHeight() / 2) - (total_circles_height / 2) + (level_circles_border_dp + (y * ((radius * 2) + level_circles_border_dp))), radius, screen.getResources().getColor(R.color.green_bright), screen, false, SubTitle_Paint);
+                    Level_Buttons[current_lvl - 1] = new level_button(text, (int) (radius / 1.5f), font,screen.getResources().getColor(R.color.black), level_circles_border_dp + (x * ((radius * 2) + level_circles_border_dp)), (screen.ScreenHeight() / 2) - (total_circles_height / 2) + (level_circles_border_dp + (y * ((radius * 2) + level_circles_border_dp))), radius, screen.getResources().getColor(R.color.green_bright), screen, SubTitle_Paint);
                 }
                 current_lvl++;
             }
@@ -165,8 +165,6 @@ public class LevelsManager {
         for (int i = 0; i < Level_Buttons.length; i++) {
             Level_Buttons[i].draw(canvas);
         }
-
-
 
         //draw title
         Rect Title_Paint_bounds = new Rect();

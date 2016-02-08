@@ -72,19 +72,12 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener, IIni
 		gameplayManager = new GameplayManager(this,levelsManager,audioManager,gameStateManager);
 		gameOverManager = new GameOverManager(this,audioManager,levelsManager,gameplayManager,this);
 
-
 		LevelsPatternsManager.GetInstance(getBaseContext()).RegisterLevelAdded(this);
-
-		//setDebugMode(true);
-		initialiseAccelerometer();
-
-
 	}
 
 	@Override
 	public void Start() {
 		super.Start();
-		//TODO: Change Fonts and font sizes from here
 		//fonts
 		specialFont = Typeface.createFromAsset(getAssets(), "forte.ttf");
 
@@ -94,10 +87,6 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener, IIni
 		Title_Paint.setAntiAlias(true);
 		Title_Paint.setColor(getResources().getColor(R.color.blue));
 		Title_Paint.setTypeface(specialFont);
-
-
-
-
 
 		//Wall Instruction Paint
 		Instruction_Paint.setTextSize(dpToPx(38));
@@ -121,33 +110,14 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener, IIni
 		//initialise wall sprite
 		wall_sprite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.bluewall), ScreenHeight() * 0.18f, true);
 
-
-
-		//Menu stuff________________________________________________________________________________
 		//play button
 		btn_Play = new Button(getResources().getString(R.string.Play), ScreenWidth() / 10, specialFont, getResources().getColor(R.color.black), ScreenWidth() / 2, ScreenHeight() * 0.45f, this, false);
 		btn_Play.x = ScreenWidth() / 2 - btn_Play.getWidth() / 2;
 
-		//highscores button
-		//btn_Highscores = new Button(new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.highscore), ScreenWidth() * 0.17f), 0, ScreenHeight() * 0.63f, this, false);
-		//btn_Highscores.x = ScreenWidth() / 2 - btn_Highscores.getWidth() / 2;
-		//btn_Highscores.y = ScreenHeight() - (wall_sprite.getHeight() / 2) - (btn_Highscores.getHeight() / 2);
-
 
 		levelsManager.populateLevelButtons(specialFont);
-
-
-
 		gameOverManager.initialize(wall_sprite,specialFont);
-
-		//gameplay stuff________________________________________________________________________________
-
 		gameplayManager.initialize(wall_sprite);
-
-		//set world origin
-		setOrigin(BOTTOM_LEFT);
-
-
 
 		//state = MENU;
 
@@ -168,11 +138,6 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener, IIni
 		} else if (gameStateManager.state == GameStateManager.GameState.gameplay) {
 			gameplayManager.step(wall_sprite);
 		}
-
-	}
-
-	@Override
-	public synchronized void onAccelerometer(PointF point) {
 
 	}
 
@@ -279,7 +244,6 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener, IIni
 		//draw sound buttons
 		audioManager.draw(canvas);
 
-
 		super.Draw(canvas);
 	}
 
@@ -291,28 +255,8 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener, IIni
 
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-	}
-
-	@Override
 	public void onPause() {
 		super.onPause();
 		gameplayManager.pause();
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
 	}
 }
