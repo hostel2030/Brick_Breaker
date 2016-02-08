@@ -14,7 +14,7 @@
         android:layout_height="wrap_content" android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:text="Brick Type:"/>
+            android:layout_height="wrap_content" android:text="@string/bricktype"/>
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
         android:id="@+id/saveLevelButton"
         android:layout_width="fill_parent"
         android:textAlignment="center"
-        android:layout_height="wrap_content" android:text="Save Level"/>
+        android:layout_height="wrap_content" android:text="@string/savelevel"/>
 
 
 

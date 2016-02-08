@@ -38,12 +38,12 @@ public class GameOverManager {
 
     public void initialize(Sprite relativeSprite, Typeface font){
         //replay button
-        btn_Replay = new Button(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.replay), screen.ScreenWidth() * 0.13f), 0, 0, screen, false);
+        btn_Replay = new Button(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.replay), screen.ScreenWidth() * 0.13f), 0, 0, screen);
         btn_Replay.x = screen.ScreenWidth() / 2 - btn_Replay.getWidth() * 2f;
         btn_Replay.y = screen.ScreenHeight() - (relativeSprite.getHeight() / 2) - (btn_Replay.getHeight() / 2);
 
         //next button
-        btn_Next = new Button(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.next), screen.ScreenWidth() * 0.12f), 0, 0, screen, false);
+        btn_Next = new Button(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.next), screen.ScreenWidth() * 0.12f), 0, 0, screen);
         btn_Next.x = screen.ScreenWidth() / 2 + btn_Next.getWidth();
         btn_Next.y = screen.ScreenHeight() - (relativeSprite.getHeight() / 2) - (btn_Next.getHeight() / 2);
 

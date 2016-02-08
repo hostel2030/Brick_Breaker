@@ -1,12 +1,9 @@
 package com.finalproject.brickbreaker.activities;
 
-
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PointF;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -29,15 +26,12 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener, IIni
 
 	//paints
 	Paint Title_Paint = new Paint();
-
-
 	Paint Instruction_Paint = new Paint();
 	Paint Black_shader = new Paint();
 	Paint Black_dark_shader = new Paint();
 
 	Sprite wall_sprite;
 
-	//menu buttons
 	Button btn_Play;
 
 	int top_border, side_borders;
@@ -78,11 +72,9 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener, IIni
 	@Override
 	public void Start() {
 		super.Start();
-		//fonts
+
 		specialFont = Typeface.createFromAsset(getAssets(), "forte.ttf");
 
-		//set paints
-		//title
 		Title_Paint.setTextSize(dpToPx(38));
 		Title_Paint.setAntiAlias(true);
 		Title_Paint.setColor(getResources().getColor(R.color.blue));
@@ -98,10 +90,8 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener, IIni
 		Black_shader.setColor(getResources().getColor(R.color.black));
 		Black_dark_shader.setColor(getResources().getColor(R.color.black_dark));
 
-		//Global stuff_____________________________________________________________________________
 		audioManager.initialize();
 		levelsManager.initialize();
-
 		top_border = (int) Settings.getTopBorder(ScreenHeight());
 
 		//initialise borders
@@ -111,21 +101,13 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener, IIni
 		wall_sprite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.bluewall), ScreenHeight() * 0.18f, true);
 
 		//play button
-		btn_Play = new Button(getResources().getString(R.string.Play), ScreenWidth() / 10, specialFont, getResources().getColor(R.color.black), ScreenWidth() / 2, ScreenHeight() * 0.45f, this, false);
+		btn_Play = new Button(getResources().getString(R.string.Play), ScreenWidth() / 10, specialFont, getResources().getColor(R.color.black), ScreenWidth() / 2, ScreenHeight() * 0.45f, this);
 		btn_Play.x = ScreenWidth() / 2 - btn_Play.getWidth() / 2;
 
 
 		levelsManager.populateLevelButtons(specialFont);
 		gameOverManager.initialize(wall_sprite,specialFont);
 		gameplayManager.initialize(wall_sprite);
-
-		//state = MENU;
-
-		//just in case of ad refresh
-		if (gameStateManager.state == GameStateManager.GameState.levelMenu) {
-			Levelmenu();
-		}
-
 	}
 
 

@@ -54,12 +54,12 @@ public class AudioManager {
         sound_on = new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.sound_on), screen.ScreenWidth() * 0.1f);
 
         //music mute
-        btn_music_mute = new Button(music_on, 0, 0, screen, false);
+        btn_music_mute = new Button(music_on, 0, 0, screen);
         btn_music_mute.x = (screen.ScreenWidth() / 2) + btn_music_mute.getWidth() * 1.5f;
         btn_music_mute.y = (Settings.getTopBorder(screen.ScreenHeight()) / 4) - btn_music_mute.getHeight() * 0.5f;
 
         //sound mute
-        btn_sound_mute = new Button(sound_on, 0, 0, screen, false);
+        btn_sound_mute = new Button(sound_on, 0, 0, screen);
         btn_sound_mute.x = (screen.ScreenWidth() / 2) - btn_sound_mute.getWidth() * 2.5f;
         btn_sound_mute.y = (Settings.getTopBorder(screen.ScreenHeight()) / 4) - btn_sound_mute.getHeight() * 0.5f;
     }

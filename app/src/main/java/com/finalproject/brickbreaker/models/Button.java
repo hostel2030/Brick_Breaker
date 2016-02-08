@@ -30,10 +30,8 @@ public class Button extends Instance {
 	 *            y-coordinate to draw button
 	 * @param screen
 	 *            A reference to the main nudge engine screen instance
-	 * @param world
-	 *            true if you wish to draw the button relative to the camera or false if you wish to draw it relative to screen
 	 */
-	public Button(Sprite sprite, float x, float y, Screen screen, boolean world) {
+	public Button(Sprite sprite, float x, float y, Screen screen) {
 		super(sprite, x, y, screen, BrickTypes.Empty);
 		type = SPRITE_BTN;
 	}
@@ -55,10 +53,8 @@ public class Button extends Instance {
 	 *            y-coordinate to draw button
 	 * @param screen
 	 *            A reference to the main nudge engine screen instance
-	 * @param world
-	 *            true if you wish to draw the button relative to the camera or false if you wish to draw it relative to screen
 	 */
-	public Button(String text, int dpSize, Typeface font, int color, float x, float y, Screen screen, boolean world) {
+	public Button(String text, int dpSize, Typeface font, int color, float x, float y, Screen screen) {
 		super(null, x, y, screen, BrickTypes.Empty);
 		type = TEXT_BTN;
 		textPaint = new Paint();
@@ -90,10 +86,8 @@ public class Button extends Instance {
 	 *            button height
 	 * @param screen
 	 *            A reference to the main nudge engine screen instance
-	 * @param world
-	 *            true if you wish to draw the button relative to the camera or false if you wish to draw it relative to screen
 	 */
-	public Button(String text, int dpSize, Typeface font, int color, float x, float y, float height, float width, int BackColor, Screen screen, boolean world) {
+	public Button(String text, int dpSize, Typeface font, int color, float x, float y, float height, float width, int BackColor, Screen screen) {
 		super(null, x, y, screen, BrickTypes.Empty);
 		type = TEXT_BOX_BTN;
 		textPaint = new Paint();

@@ -67,7 +67,7 @@ public class GameplayManager {
         bat.y = screen.ScreenHeight() - (relativeSprite.getHeight()) - (bat.getHeight() * 1.2f);
 
         //pause button
-        btn_pause = new Button(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.pause), screen.ScreenWidth() * 0.08f), 0, 0, screen, false);
+        btn_pause = new Button(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.pause), screen.ScreenWidth() * 0.08f), 0, 0, screen);
         btn_pause.x = screen.ScreenWidth() / 2 - btn_pause.getWidth() / 2;
         btn_pause.y = (top_border / 4) - btn_pause.getHeight() * 0.5f;
 
