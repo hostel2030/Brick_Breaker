@@ -11,7 +11,7 @@ import com.finalproject.brickbreaker.R;
 import com.finalproject.brickbreaker.services.Settings;
 import com.finalproject.brickbreaker.models.Button;
 import com.finalproject.brickbreaker.models.Screen;
-import com.finalproject.brickbreaker.models.Sprite;
+import com.finalproject.brickbreaker.models.ScaledImage;
 
 public class AudioManager {
 
@@ -23,7 +23,7 @@ public class AudioManager {
     Button btn_sound_mute, btn_music_mute;
 
     //sound
-    Sprite sound_on, sound_off, music_on, music_off;
+    ScaledImage sound_on, sound_off, music_on, music_off;
     private Screen screen;
     private GameStateManager gameStateManager;
 
@@ -31,7 +31,7 @@ public class AudioManager {
         this.screen = screen;
         this.gameStateManager = gameStateManager;
 
-        //initialise sound fx
+        //initialise sound
         screen.setVolumeControlStream(android.media.AudioManager.STREAM_MUSIC);
         sp = new SoundPool(5, android.media.AudioManager.STREAM_MUSIC, 0);
         sound_ballout = sp.load(screen, R.raw.ballout, 1);
@@ -48,10 +48,10 @@ public class AudioManager {
 
     public void initialize(){
         //sound buttons
-        music_on = new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.music_on), screen.ScreenWidth() * 0.1f);
-        music_off = new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.music_off), screen.ScreenWidth() * 0.1f);
-        sound_off = new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.sound_off), screen.ScreenWidth() * 0.1f);
-        sound_on = new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.sound_on), screen.ScreenWidth() * 0.1f);
+        music_on = new ScaledImage(BitmapFactory.decodeResource(screen.getResources(), R.drawable.music_on), screen.ScreenWidth() * 0.1f);
+        music_off = new ScaledImage(BitmapFactory.decodeResource(screen.getResources(), R.drawable.music_off), screen.ScreenWidth() * 0.1f);
+        sound_off = new ScaledImage(BitmapFactory.decodeResource(screen.getResources(), R.drawable.sound_off), screen.ScreenWidth() * 0.1f);
+        sound_on = new ScaledImage(BitmapFactory.decodeResource(screen.getResources(), R.drawable.sound_on), screen.ScreenWidth() * 0.1f);
 
         //music mute
         btn_music_mute = new Button(music_on, 0, 0, screen);

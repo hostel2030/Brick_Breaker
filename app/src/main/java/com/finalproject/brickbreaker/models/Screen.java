@@ -20,7 +20,6 @@ public class Screen extends Activity implements Runnable, OnTouchListener {
 	private SurfaceHolder holder;
 	private boolean locker = true, initialised = false;
 	private Thread thread;
-	//public WakeLock WL;
 	private int width = 0, height = 0;
 
 	public Activity activity = this;
@@ -56,7 +55,6 @@ public class Screen extends Activity implements Runnable, OnTouchListener {
 		params.weight = 1;
 		layout.setLayoutParams(params);
 
-		//add relative layout to linear layout for banner ad mobility
 		linear_layout = new LinearLayout(this);
 		linear_layout.setOrientation(LinearLayout.VERTICAL);
 		linear_layout.addView(layout);
@@ -75,14 +73,10 @@ public class Screen extends Activity implements Runnable, OnTouchListener {
 	/* Main game loop.......................................................... */
 	@Override
 	public void run() {
-		//int rand = (int) (Math.random() * 100);
 		synchronized (ACCESSIBILITY_SERVICE) {
-
 			while (locker) {
-				//System.out.println("start-");
-
 				now = SystemClock.elapsedRealtime();
-				if (now - lastRefresh > 37) {//limit 35fps - 28
+				if (now - lastRefresh > 37) {
 					lastRefresh = SystemClock.elapsedRealtime();
 					if (!holder.getSurface().isValid()) {
 						continue;
@@ -140,7 +134,6 @@ public class Screen extends Activity implements Runnable, OnTouchListener {
 				recalculateScreenCounter = -1;
 			}
 		}
-
 	}
 
 	public int dpToPx(int dp) {
@@ -217,7 +210,7 @@ public class Screen extends Activity implements Runnable, OnTouchListener {
 		return true;
 	}
 
-	/* pause, destroy, resume................................................ */
+	/* pause, resume................................................ */
 	@Override
 	protected void onResume() {
 		super.onResume();

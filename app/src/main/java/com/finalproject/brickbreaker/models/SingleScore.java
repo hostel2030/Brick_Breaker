@@ -13,7 +13,6 @@ public class SingleScore {
 	}
 
 
-	//Local score. Simple with no details______________________________________________________________________________________________________
 	public int load_localscore_simple(String identifier) {
 		// load preferences
 		SharedPreferences hiscores = PreferenceManager.getDefaultSharedPreferences(screen.getApplicationContext());
@@ -31,17 +30,10 @@ public class SingleScore {
 		hiscores_editor.commit();
 	}
 
-	public void save_localscore_simple(int score, String identifier, boolean largerisbetter) {
+	public void save_localscore_smaller(int score, String identifier) {
 
-		if (largerisbetter) {
-			//save score if larger than the one saved
-			if (score > load_localscore_simple(identifier))
-				save_localscore_simple(score, identifier);
-		} else {
-			//save score if smaller than the one saved
-			if (score < load_localscore_simple(identifier) || load_localscore_simple(identifier) == 0)
-				save_localscore_simple(score, identifier);
-		}
+		if (score < load_localscore_simple(identifier) || load_localscore_simple(identifier) == 0)
+			save_localscore_simple(score, identifier);
 	}
 
 }

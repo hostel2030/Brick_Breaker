@@ -20,7 +20,7 @@ import com.finalproject.brickbreaker.R;
 import com.finalproject.brickbreaker.services.Settings;
 import com.finalproject.brickbreaker.models.Button;
 import com.finalproject.brickbreaker.models.Screen;
-import com.finalproject.brickbreaker.models.Sprite;
+import com.finalproject.brickbreaker.models.ScaledImage;
 
 public class GameActivity extends Screen  implements IOnLevelAddedListener, IInitiateGameListener {
 
@@ -30,7 +30,7 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener, IIni
 	Paint Black_shader = new Paint();
 	Paint Black_dark_shader = new Paint();
 
-	Sprite wall_sprite;
+	ScaledImage wall_sprite;
 
 	Button btn_Play;
 
@@ -98,7 +98,7 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener, IIni
 		side_borders = Settings.getSideBorders(this);
 
 		//initialise wall sprite
-		wall_sprite = new Sprite(BitmapFactory.decodeResource(getResources(), R.drawable.bluewall), ScreenHeight() * 0.18f, true);
+		wall_sprite = new ScaledImage(BitmapFactory.decodeResource(getResources(), R.drawable.bluewall), ScreenHeight() * 0.18f, true);
 
 		//play button
 		btn_Play = new Button(getResources().getString(R.string.Play), ScreenWidth() / 10, specialFont, getResources().getColor(R.color.black), ScreenWidth() / 2, ScreenHeight() * 0.45f, this);
@@ -148,24 +148,14 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener, IIni
 				if (btn_Play.isTouched(event)) {
 					btn_Play.Highlight(getResources().getColor(R.color.red));
 				}
-				//if (btn_Highscores.isTouched(event)) {
-				//	btn_Highscores.Highlight(getResources().getColor(R.color.red));
-				//}
 			}
 			if (event.getAction() == MotionEvent.ACTION_UP) {
-				//refresh all
 				btn_Play.LowLight();
-				//btn_Highscores.LowLight();
 
 				if (btn_Play.isTouched(event)) {
 					audioManager.playBounce();
 					Levelmenu();
 				}
-				//if (btn_Highscores.isTouched(event)) {
-				//	if (sound_bounce != 0 && !sound_muted)
-				//		sp.play(sound_bounce, 1, 1, 0, 0, 1);
-				// open leaderboard
-				//}
 			}
 			if (event.getAction() == MotionEvent.ACTION_MOVE) {
 
@@ -214,7 +204,6 @@ public class GameActivity extends Screen  implements IOnLevelAddedListener, IIni
 			canvas.drawText(getResources().getString(R.string.app_name), (ScreenWidth() / 2) - (Title_Paint_bounds.width() / 2), (top_border * 0.75f) + (Title_Paint_bounds.height() / 2), Title_Paint);
 			//draw buttons
 			btn_Play.draw(canvas);
-			//btn_Highscores.draw(canvas);
 
 		} else if (gameStateManager.state == GameStateManager.GameState.levelMenu) {
 			levelsManager.draw(canvas, Title_Paint);

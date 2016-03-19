@@ -1,19 +1,18 @@
 package com.finalproject.brickbreaker.models;
 
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.view.MotionEvent;
 
 import com.finalproject.brickbreaker.services.BrickTypes;
 
 public class Instance {
 	public float x, y, speedx = 0, speedy = 0, accelerationx = 0, accelerationy = 0;
-	public Sprite sprite;
+	public ScaledImage sprite;
 	Screen screen;
 	Physics physics = new Physics();
 	public BrickTypes type = BrickTypes.Empty;
 
-	public Instance(Sprite sprite, float x, float y, Screen screen, BrickTypes type) {
+	public Instance(ScaledImage sprite, float x, float y, Screen screen, BrickTypes type) {
 		this.sprite = sprite;
 		this.screen = screen;
 		this.x = x;
@@ -42,12 +41,6 @@ public class Instance {
 		//draw image
 		sprite.draw(canvas, x, y);
 
-	}
-
-	//draw the sprite to screen
-	public void draw(Canvas canvas, Paint paint) {
-		//draw image
-		sprite.draw(canvas, x, y, paint);
 	}
 
 	public boolean isTouched(MotionEvent event) {

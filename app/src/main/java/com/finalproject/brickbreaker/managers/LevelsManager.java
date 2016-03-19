@@ -154,7 +154,7 @@ public class LevelsManager {
 
     public void onCurrentLevelPassed(){
             //success! - game passed - save score
-            scoreManager.save_localscore_simple(score_times[currentLevel], "" + currentLevel, false);
+            scoreManager.save_localscore_smaller(score_times[currentLevel], "" + currentLevel);
 
             if (Level_Buttons.length >= currentLevel + 1)
                 scoreManager.save_localscore_simple(unlocked, "unlock" + (currentLevel + 1));

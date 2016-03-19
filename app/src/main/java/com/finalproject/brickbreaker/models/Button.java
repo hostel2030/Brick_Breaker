@@ -19,41 +19,13 @@ public class Button extends Instance {
 	public Paint BackPaint = new Paint();
 	public float height, width;
 
-	/**
-	 * Create new sprite button
-	 * 
-	 * @param sprite
-	 *            sprite to bisplay on button
-	 * @param x
-	 *            x-coordinate to draw button
-	 * @param y
-	 *            y-coordinate to draw button
-	 * @param screen
-	 *            A reference to the main nudge engine screen instance
-	 */
-	public Button(Sprite sprite, float x, float y, Screen screen) {
+	//create image button
+	public Button(ScaledImage sprite, float x, float y, Screen screen) {
 		super(sprite, x, y, screen, BrickTypes.Empty);
 		type = SPRITE_BTN;
 	}
 
-	/**
-	 * Create new text button
-	 * 
-	 * @param text
-	 *            text to bisplay on button
-	 * @param dpSize
-	 *            size of text in dp
-	 * @param font
-	 *            Typface of text
-	 * @param color
-	 *            Color to use for text
-	 * @param x
-	 *            x-coordinate to draw button
-	 * @param y
-	 *            y-coordinate to draw button
-	 * @param screen
-	 *            A reference to the main nudge engine screen instance
-	 */
+	//create text button
 	public Button(String text, int dpSize, Typeface font, int color, float x, float y, Screen screen) {
 		super(null, x, y, screen, BrickTypes.Empty);
 		type = TEXT_BTN;
@@ -65,62 +37,7 @@ public class Button extends Instance {
 		this.text = text;
 	}
 
-	/**
-	 * Create new rectangle button
-	 * 
-	 * @param text
-	 *            text to bisplay on button
-	 * @param dpSize
-	 *            size of text in dp
-	 * @param font
-	 *            Typface of text
-	 * @param color
-	 *            Color to use for text
-	 * @param x
-	 *            x-coordinate to draw button
-	 * @param y
-	 *            y-coordinate to draw button
-	 * @param height
-	 *            button width
-	 * @param width
-	 *            button height
-	 * @param screen
-	 *            A reference to the main nudge engine screen instance
-	 */
-	public Button(String text, int dpSize, Typeface font, int color, float x, float y, float height, float width, int BackColor, Screen screen) {
-		super(null, x, y, screen, BrickTypes.Empty);
-		type = TEXT_BOX_BTN;
-		textPaint = new Paint();
-		textPaint.setTextSize(screen.dpToPx(dpSize));
-		textPaint.setAntiAlias(true);
-		textPaint.setColor(color);
-		textPaint.setTypeface(font);
-		BackPaint.setColor(BackColor);
-		BackPaint.setAntiAlias(true);
-		this.text = text;
-		this.height = height;
-		this.width = width;
-	}
-
-	/**
-	 * Create new round button
-	 * 
-	 * @param text
-	 *            text to bisplay on button
-	 * @param dpSize
-	 *            size of text in dp
-	 * @param font
-	 *            Typface of text
-	 * @param color
-	 *            Color to use for text
-	 * @param x
-	 *            x-coordinate to draw button
-	 * @param y
-	 *            y-coordinate to draw button
-	 * @param screen
-	 *            A reference to the main nudge engine screen instance
-
-	 */
+	//create round button
 	public Button(String text, int dpSize, Typeface font, int color, float x, float y, float radius, int BackColor, Screen screen) {
 		super(null, x, y, screen, BrickTypes.Empty);
 		type = TEXT_CIRCLE_BTN;
@@ -144,6 +61,7 @@ public class Button extends Instance {
 			textPaint.setColorFilter(filter);
 	}
 
+	//clear highlight
 	public void LowLight() {
 		ColorFilter filter = null;
 		if (type == SPRITE_BTN)
@@ -178,10 +96,8 @@ public class Button extends Instance {
 		}
 	}
 
-	//draw the sprite to screen
 	@Override
 	public void draw(Canvas canvas) {
-		//draw background color
 		if (type == TEXT_BOX_BTN) {
 
 			Rect bounds = new Rect();
@@ -194,8 +110,6 @@ public class Button extends Instance {
 
 			Rect bounds = new Rect();
 			textPaint.getTextBounds(text, 0, text.length(), bounds);
-
-			//canvas.drawCircle(x + (width / 2), y + (height / 2), (width / 2), BackPaint);
 
 			final RectF rect = new RectF();
 			rect.set(x, y, x + width, y + height);

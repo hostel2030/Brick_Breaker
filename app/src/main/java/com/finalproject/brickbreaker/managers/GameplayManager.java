@@ -13,7 +13,7 @@ import com.finalproject.brickbreaker.R;
 import com.finalproject.brickbreaker.models.Button;
 import com.finalproject.brickbreaker.models.Instance;
 import com.finalproject.brickbreaker.models.Screen;
-import com.finalproject.brickbreaker.models.Sprite;
+import com.finalproject.brickbreaker.models.ScaledImage;
 import com.finalproject.brickbreaker.services.BrickTypes;
 import com.finalproject.brickbreaker.services.BrickTypesHelper;
 import com.finalproject.brickbreaker.services.Settings;
@@ -25,7 +25,7 @@ public class GameplayManager {
     private int top_border;
     //lives
     int lives_left;
-    Sprite life;
+    ScaledImage life;
 
 
     boolean pause = false, notstarted = true, firstTimerUpdateRemoved = false;
@@ -57,22 +57,22 @@ public class GameplayManager {
         this.gameStateManager = gameStateManager;
     }
 
-    public void initialize(Sprite relativeSprite){
+    public void initialize(ScaledImage relativeSprite){
 
         top_border = Settings.getTopBorder(screen.ScreenHeight());
 
         //bat
-        bat = new Instance(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.bat), screen.ScreenWidth() * 0.2f), 0, 0, screen, BrickTypes.Empty);
+        bat = new Instance(new ScaledImage(BitmapFactory.decodeResource(screen.getResources(), R.drawable.bat), screen.ScreenWidth() * 0.2f), 0, 0, screen, BrickTypes.Empty);
         bat.x = screen.ScreenWidth() / 2 - bat.getWidth() / 2;
         bat.y = screen.ScreenHeight() - (relativeSprite.getHeight()) - (bat.getHeight() * 1.2f);
 
         //pause button
-        btn_pause = new Button(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.pause), screen.ScreenWidth() * 0.08f), 0, 0, screen);
+        btn_pause = new Button(new ScaledImage(BitmapFactory.decodeResource(screen.getResources(), R.drawable.pause), screen.ScreenWidth() * 0.08f), 0, 0, screen);
         btn_pause.x = screen.ScreenWidth() / 2 - btn_pause.getWidth() / 2;
         btn_pause.y = (top_border / 4) - btn_pause.getHeight() * 0.5f;
 
         //life sprite
-        life = new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.life), top_border * 0.2f);
+        life = new ScaledImage(BitmapFactory.decodeResource(screen.getResources(), R.drawable.life), top_border * 0.2f);
     }
 
     public void draw(Canvas canvas, Paint paint){
@@ -105,7 +105,7 @@ public class GameplayManager {
     }
 
 
-    public void step(Sprite relativeSprite){
+    public void step(ScaledImage relativeSprite){
         //things to pause
         if (!notstarted && !pause) {
 
@@ -149,24 +149,6 @@ public class GameplayManager {
                         if (bricks_current_level[x][y] != null) {
                             if (balls.get(i).CollidedWith(bricks_current_level[x][y])) {
 
-                                //									//top bottom collision
-                                //									if (balls.get(i).y > bricks_current_level[x][y].y) {
-                                //										//ball collided from bottom of block
-                                //										balls.get(i).speedy = Math.abs(balls.get(i).speedy);
-                                //									} else {
-                                //										//ball collided from top of block
-                                //										balls.get(i).speedy = -Math.abs(balls.get(i).speedy);
-                                //									}
-                                //									//left right collision
-                                //									if (balls.get(i).x > bricks_current_level[x][y].x && balls.get(i).x < bricks_current_level[x][y].x) {
-                                //										//ball collided from right of block
-                                //										balls.get(i).speedx = Math.abs(balls.get(i).speedx);
-                                //
-                                //									} else {
-                                //										//ball collided from left of block
-                                //										balls.get(i).speedx = -Math.abs(balls.get(i).speedx);
-                                //									}
-
                                 //ball collided from top of block
                                 if (balls.get(i).speedy > 0 && between(bricks_current_level[x][y].y, bricks_current_level[x][y].getHeight() * 0.1f, balls.get(i).y, balls.get(i).getHeight())) {
                                     balls.get(i).speedy = -Math.abs(balls.get(i).speedy);
@@ -185,13 +167,12 @@ public class GameplayManager {
                                         balls.get(i).speedx = Math.abs(balls.get(i).speedx);
                                     }
 
-                                //balls.get(i).speedx = -balls.get(i).speedx;
-
                                 //brick specific code
                                 if (bricks_current_level[x][y].type == BrickTypes.Normal1 || bricks_current_level[x][y].type == BrickTypes.Normal2 || bricks_current_level[x][y].type == BrickTypes.Normal3 || bricks_current_level[x][y].type == BrickTypes.Normal4) {
                                     //collided to brick 1, 2, 3, 4
                                     bricks_current_level[x][y] = null;
 
+                                    infinite_loop_timer.set(i, 0);
                                     audioManager.playBounce();
 
                                 } else if (bricks_current_level[x][y].type == BrickTypes.Wall) {
@@ -200,11 +181,12 @@ public class GameplayManager {
                                 } else if (bricks_current_level[x][y].type == BrickTypes.Big) {
                                     //collided to special brick 2 - enlarge board
                                     //bat
-                                    bat.sprite = new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.bat), screen.ScreenWidth() * 0.3f);
+                                    bat.sprite = new ScaledImage(BitmapFactory.decodeResource(screen.getResources(), R.drawable.bat), screen.ScreenWidth() * 0.3f);
                                     bat.x = screen.ScreenWidth() / 2 - bat.getWidth() / 2;
                                     bat.y = screen.ScreenHeight() - (relativeSprite.getHeight()) - (bat.getHeight() * 1.2f);
                                     bricks_current_level[x][y] = null;
 
+                                    infinite_loop_timer.set(i, 0);
                                     audioManager.playBounce();
 
                                 } else if (bricks_current_level[x][y].type == BrickTypes.Ball) {
@@ -213,6 +195,7 @@ public class GameplayManager {
                                     //add ball
                                     add_ball();
 
+                                    infinite_loop_timer.set(i, 0);
                                     audioManager.playBounce();
                                 } else if (bricks_current_level[x][y].type == BrickTypes.Life) {
                                     //collided to special brick 3 - add life
@@ -220,6 +203,7 @@ public class GameplayManager {
                                     if (lives_left < Settings.MAX_LIVES)
                                         lives_left++;
 
+                                    infinite_loop_timer.set(i, 0);
                                     audioManager.playBounce();
                                 }
 
@@ -300,7 +284,7 @@ public class GameplayManager {
     }
 
     private void add_ball() {
-        balls.add(new Instance(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.ball), screen.ScreenWidth() * 0.04f), 0, 0, screen, BrickTypes.Empty));
+        balls.add(new Instance(new ScaledImage(BitmapFactory.decodeResource(screen.getResources(), R.drawable.ball), screen.ScreenWidth() * 0.04f), 0, 0, screen, BrickTypes.Empty));
         balls.get(balls.size() - 1).x = screen.ScreenWidth() / 2 - balls.get(0).getWidth() / 2;
         balls.get(balls.size() - 1).y = screen.ScreenHeight() * 0.7f;
         balls.get(balls.size() - 1).speedy = -screen.dpToPx(10);
@@ -315,7 +299,7 @@ public class GameplayManager {
         return a.intersect(b);
     }
 
-    public void StartGame(Sprite relativeSprite) {
+    public void StartGame(ScaledImage relativeSprite) {
         gameStateManager.state = GameStateManager.GameState.gameplay;
 
         //refresh score
@@ -331,7 +315,7 @@ public class GameplayManager {
         add_ball();
 
         //refresh bat
-        bat.sprite = new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.bat), screen.ScreenWidth() * 0.2f);
+        bat.sprite = new ScaledImage(BitmapFactory.decodeResource(screen.getResources(), R.drawable.bat), screen.ScreenWidth() * 0.2f);
         bat.x = screen.ScreenWidth() / 2 - bat.getWidth() / 2;
         bat.y = screen.ScreenHeight() - (relativeSprite.getHeight()) - (bat.getHeight() * 1.2f);
 
@@ -349,7 +333,7 @@ public class GameplayManager {
                 if (currentBrickPattern[y][x] == BrickTypes.Empty)
                     bricks_current_level[x][y] = null;
                 else {
-                    Sprite brick = new Sprite(BitmapFactory.decodeResource(screen.getResources(),  BrickTypesHelper.GetImageId(currentBrickPattern[y][x])), (screen.ScreenWidth() * 0.1f) - ((float) Settings.getSideBorders(screen) / 5));
+                    ScaledImage brick = new ScaledImage(BitmapFactory.decodeResource(screen.getResources(),  BrickTypesHelper.GetImageId(currentBrickPattern[y][x])), (screen.ScreenWidth() * 0.1f) - ((float) Settings.getSideBorders(screen) / 5));
                     bricks_current_level[x][y] = new Instance(brick, x * brick.getWidth() + Settings.getSideBorders(screen), (y * brick.getHeight()) + top_border, screen, currentBrickPattern[y][x]);
                 }
             }

@@ -12,6 +12,7 @@ public class Physics {
 		return a.intersect(b);
 	}
 
+	//touching
 	public boolean intersect(int x, int y, int width, int height, int pointx, int pointy) {
 		a = new RectF(x, y, x + width, y + height);
 		if ((pointx > x) && (pointy > y) && (pointx < (x + width)) && (pointy < (y + height))) {

@@ -12,12 +12,12 @@ import com.finalproject.brickbreaker.R;
 import com.finalproject.brickbreaker.interfaces.IInitiateGameListener;
 import com.finalproject.brickbreaker.models.Button;
 import com.finalproject.brickbreaker.models.Screen;
-import com.finalproject.brickbreaker.models.Sprite;
+import com.finalproject.brickbreaker.models.ScaledImage;
 import com.finalproject.brickbreaker.services.Settings;
 
 public class GameOverManager {
 
-    Sprite gamewon, gameover;
+    ScaledImage gamewon, gameover;
     Button btn_Replay, btn_Next;
     private Screen screen;
     private AudioManager audioManager;
@@ -36,20 +36,20 @@ public class GameOverManager {
         this.initiateGameListener = initiateGameListener;
     }
 
-    public void initialize(Sprite relativeSprite, Typeface font){
+    public void initialize(ScaledImage relativeSprite, Typeface font){
         //replay button
-        btn_Replay = new Button(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.replay), screen.ScreenWidth() * 0.13f), 0, 0, screen);
+        btn_Replay = new Button(new ScaledImage(BitmapFactory.decodeResource(screen.getResources(), R.drawable.replay), screen.ScreenWidth() * 0.13f), 0, 0, screen);
         btn_Replay.x = screen.ScreenWidth() / 2 - btn_Replay.getWidth() * 2f;
         btn_Replay.y = screen.ScreenHeight() - (relativeSprite.getHeight() / 2) - (btn_Replay.getHeight() / 2);
 
         //next button
-        btn_Next = new Button(new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.next), screen.ScreenWidth() * 0.12f), 0, 0, screen);
+        btn_Next = new Button(new ScaledImage(BitmapFactory.decodeResource(screen.getResources(), R.drawable.next), screen.ScreenWidth() * 0.12f), 0, 0, screen);
         btn_Next.x = screen.ScreenWidth() / 2 + btn_Next.getWidth();
         btn_Next.y = screen.ScreenHeight() - (relativeSprite.getHeight() / 2) - (btn_Next.getHeight() / 2);
 
         //initialize score image
-        gamewon = new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.score), screen.ScreenWidth() * 0.3f);
-        gameover = new Sprite(BitmapFactory.decodeResource(screen.getResources(), R.drawable.gameover), screen.ScreenWidth() * 0.3f);
+        gamewon = new ScaledImage(BitmapFactory.decodeResource(screen.getResources(), R.drawable.score), screen.ScreenWidth() * 0.3f);
+        gameover = new ScaledImage(BitmapFactory.decodeResource(screen.getResources(), R.drawable.gameover), screen.ScreenWidth() * 0.3f);
 
         //gameover score Paint
         Gameover_Score_Paint.setTextSize(screen.dpToPx(50));
